@@ -25,14 +25,20 @@ namespace APIAula01.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItem()
         {
-            return await _context.TodoItem.ToListAsync();
+            // Include() carrega a Category junto com os TodoItems (eager loading)
+            return await _context.TodoItem
+                .Include(t => t.Category)
+                .ToListAsync();
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
         {
-            var todoItem = await _context.TodoItem.FindAsync(id);
+            // Include() carrega a Category junto com o TodoItem
+            var todoItem = await _context.TodoItem
+                .Include(t => t.Category)
+                .FirstOrDefaultAsync(t => t.Id == id);
 
             if (todoItem == null)
             {
