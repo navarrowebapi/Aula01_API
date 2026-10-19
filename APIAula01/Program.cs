@@ -1,20 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using APIAula01.Data;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<APIAula01Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("APIAula01Context") ?? throw new InvalidOperationException("Connection string 'APIAula01Context' not found.")));
+﻿var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Registra os controllers (as classes que recebem as requisições HTTP)
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Swagger: gera a documentação da API e uma página para testar os endpoints
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Em desenvolvimento, habilita a página do Swagger em /swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -22,8 +17,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

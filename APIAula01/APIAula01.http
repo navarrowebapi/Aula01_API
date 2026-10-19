@@ -1,6 +1,45 @@
-@APIAula01_HostAddress = http://localhost:5135
+@host = http://localhost:5135
 
-GET {{APIAula01_HostAddress}}/weatherforecast/
+### Listar todos os jogos
+GET {{host}}/api/Jogos
 Accept: application/json
 
-###
+### Buscar um jogo pelo Id
+GET {{host}}/api/Jogos/1
+Accept: application/json
+
+### Cadastrar um jogo
+POST {{host}}/api/Jogos
+Content-Type: application/json
+
+{
+  "titulo": "Minecraft",
+  "genero": "Sandbox",
+  "plataforma": "PC",
+  "anoLancamento": 2011,
+  "zerado": false
+}
+
+### Atualizar um jogo
+PUT {{host}}/api/Jogos/2
+Content-Type: application/json
+
+{
+  "titulo": "Hollow Knight: Silksong",
+  "genero": "Metroidvania",
+  "plataforma": "PC",
+  "anoLancamento": 2025,
+  "zerado": true
+}
+
+### Remover um jogo
+DELETE {{host}}/api/Jogos/3
+
+### Erro de validação (título vazio) -> 400 Bad Request
+POST {{host}}/api/Jogos
+Content-Type: application/json
+
+{
+  "titulo": "",
+  "anoLancamento": 1800
+}

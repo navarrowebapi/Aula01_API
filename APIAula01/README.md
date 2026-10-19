@@ -1,120 +1,70 @@
-# APIAula01
+# APIAula01 — Versão 1 (lista em memória)
 
-API REST desenvolvida em ASP.NET Core 8.0 para gerenciamento de tarefas (Todo Items) com operações CRUD completas.
+API REST em **ASP.NET Core (.NET 10)** para gerenciar um catálogo de **jogos** com as operações CRUD.
+
+Nesta primeira versão **não há banco de dados**: os jogos ficam guardados em uma lista na memória da aplicação. Isso deixa o foco no que importa primeiro — rotas, verbos HTTP e códigos de status. A consequência: tudo que for cadastrado some quando a aplicação é reiniciada (ela sempre volta com os 3 jogos iniciais).
 
 ## Tecnologias
 
-- **ASP.NET Core 8.0** - Framework web
-- **Entity Framework Core 8.0** - ORM para acesso a dados
-- **SQL Server** - Banco de dados (LocalDB)
-- **Swagger/OpenAPI** - Documentação interativa da API
+- **ASP.NET Core / .NET 10 (LTS)** — framework web
+- **Swagger (Swashbuckle)** — documentação e página para testar a API
 
-## Estrutura do Projeto
+## Estrutura
 
 ```
 APIAula01/
-├── Controllers/          # Controladores da API
-│   └── TodoItemsController.cs
-├── Models/              # Modelos de dados
-│   └── TodoItem.cs
-├── Data/                # Contexto do Entity Framework
-│   └── APIAula01Context.cs
-├── Migrations/          # Migrações do banco de dados
-└── Program.cs           # Configuração e inicialização da aplicação
+├── Controllers/
+│   └── JogosController.cs   # Endpoints da API + lista em memória
+├── Models/
+│   └── Jogo.cs              # Modelo de dados
+├── APIAula01.http           # Requisições prontas para testar
+└── Program.cs               # Configuração da aplicação
 ```
 
 ## Pré-requisitos
 
-- .NET 8.0 SDK
-- SQL Server LocalDB (incluído no Visual Studio)
+- .NET 10 SDK
 
-## Como Executar
+## Como executar
 
-1. Certifique-se de que o banco de dados está configurado no `appsettings.json`
-2. Execute as migrações (se necessário):
-   ```bash
-   dotnet ef database update
-   ```
-3. Execute a aplicação:
-   ```bash
-   dotnet run
-   ```
-4. Acesse a documentação Swagger em: `https://localhost:{porta}/swagger`
+```bash
+cd APIAula01
+dotnet run
+```
 
-## Endpoints da API
+Depois acesse o Swagger em `http://localhost:5135/swagger`, ou use o arquivo `APIAula01.http` no VS Code / Visual Studio.
 
-Base URL: `/api/TodoItems`
+## Endpoints
 
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/api/TodoItems` | Lista todas as tarefas |
-| GET | `/api/TodoItems/{id}` | Obtém uma tarefa específica por ID |
-| POST | `/api/TodoItems` | Cria uma nova tarefa |
-| PUT | `/api/TodoItems/{id}` | Atualiza uma tarefa existente |
-| DELETE | `/api/TodoItems/{id}` | Remove uma tarefa |
+Base: `/api/Jogos`
 
-## Modelo de Dados
+| Método | Endpoint | Descrição | Respostas |
+|--------|----------|-----------|-----------|
+| GET | `/api/Jogos` | Lista todos os jogos | 200 |
+| GET | `/api/Jogos/{id}` | Busca um jogo pelo Id | 200, 404 |
+| POST | `/api/Jogos` | Cadastra um jogo | 201, 400 |
+| PUT | `/api/Jogos/{id}` | Atualiza um jogo | 204, 400, 404 |
+| DELETE | `/api/Jogos/{id}` | Remove um jogo | 204, 404 |
 
-### TodoItem
+## Modelo
 
 ```json
 {
-  "id": 0,
-  "name": "string",
-  "isComplete": false
-}
-```
-
-**Propriedades:**
-- `Id` (long) - Identificador único da tarefa
-- `Name` (string?) - Nome/descrição da tarefa
-- `IsComplete` (bool) - Indica se a tarefa está concluída
-
-## Exemplos de Uso
-
-### Criar uma nova tarefa
-```http
-POST /api/TodoItems
-Content-Type: application/json
-
-{
-  "name": "Estudar ASP.NET Core",
-  "isComplete": false
-}
-```
-
-### Atualizar uma tarefa
-```http
-PUT /api/TodoItems/1
-Content-Type: application/json
-
-{
   "id": 1,
-  "name": "Estudar ASP.NET Core",
-  "isComplete": true
+  "titulo": "The Legend of Zelda: Tears of the Kingdom",
+  "genero": "Aventura",
+  "plataforma": "Nintendo Switch",
+  "anoLancamento": 2023,
+  "zerado": true
 }
 ```
 
-### Listar todas as tarefas
-```http
-GET /api/TodoItems
-```
+- `id` (int) — gerado pela API no cadastro
+- `titulo` (string) — obrigatório
+- `genero`, `plataforma` (string)
+- `anoLancamento` (int) — entre 1970 e 2100
+- `zerado` (bool) — se o jogo já foi concluído
 
-### Obter tarefa por ID
-```http
-GET /api/TodoItems/1
-```
+## Próxima versão
 
-### Deletar uma tarefa
-```http
-DELETE /api/TodoItems/1
-```
-
-## Documentação Interativa (Swagger)
-
-Durante o desenvolvimento, acesse o Swagger UI para testar os endpoints diretamente no navegador:
-
-- URL: `https://localhost:{porta}/swagger` (modo Development)
-
-O Swagger fornece uma interface gráfica para explorar e testar todos os endpoints da API.
-
+Na versão 2, a lista em memória será trocada por um banco de dados com Entity Framework Core — os endpoints continuam os mesmos.
