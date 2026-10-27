@@ -1,0 +1,41 @@
+Instalar o pacote
+
+via CLI do NUGET:
+Install-Package Swashbuckle.AspNetCore
+
+ou via Ferramentas>Gerenciar Pacotes do Nuget> Gerenciar Pacotes do Nuget para a Solução
+
+Depois no program.cs, adicionar:
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+e 
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+EXEMPLO:
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Registra os controllers (as classes que recebem as requisições HTTP)
+builder.Services.AddControllers();
+
+// Swagger: gera a documentação da API e uma página para testar os endpoints
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+// Em desenvolvimento, habilita a página do Swagger em /swagger
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.MapControllers();
+
+app.Run();
